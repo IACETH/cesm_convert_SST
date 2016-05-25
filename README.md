@@ -3,13 +3,13 @@
 Convert SST and Sea Ice from POP output do DOCN input
 
 ## Sources
-* NCAR [description] (http://www.cesm.ucar.edu/models/cesm1.2/cesm/doc/usersguide/x2306.html). I adapted it for `CDO` instead of `ncdump`. 
+* NCAR [description](http://www.cesm.ucar.edu/models/cesm1.2/cesm/doc/usersguide/x2306.html). I adapted it for `CDO` instead of `ncdump`. 
 * Jan Sedlacek had his own version of this conversion from which I took the code for `grid_fill.ncl`.
 
 ## Warning
 
 #### Linear Interpolation
-DOCN uses the monthly mean fields of SST and Sea Ice and linearly interpolates between them. The interpolated then causes the monthly means to not be equal. In the NCAR [description] (http://www.cesm.ucar.edu/models/cesm1.2/cesm/doc/usersguide/x2306.html) they mention a way to avoid this, however, the necessary files are not available.
+DOCN uses the monthly mean fields of SST and Sea Ice and linearly interpolates between them. The interpolated then causes the monthly means to not be equal. In the NCAR [description](http://www.cesm.ucar.edu/models/cesm1.2/cesm/doc/usersguide/x2306.html) they mention a way to avoid this, however, the necessary files are not available.
 
 #### Spatial Interpolation
 The output of POP is on a rotated grid which we here convert to a regular grid. After reading from the regular grid DOCN regrids this again to the rotated grid. This is of course not very clever, one should instead keep the original grid and tell POP to use this.
@@ -30,6 +30,8 @@ The main script is `create_SST_forcing.sh`. It executes the `CDO` commands and c
 
 For `first` and `last` I recommend to use all years in the B simulation, even if you don't want to simulate all years in the `F` simulation.
 
+Run `.\create_SST_forcing.sh` and wait...
+
 ## Helper Files
 
 ##### griddes_1x1.txt
@@ -42,3 +44,20 @@ Fills the continents with interpolated data. This is important for costal region
 
 ##### change_time.py
 POP uses `days since 0-01-01 00:00:00` as netCDF time string. However, DOCN can not read this time string, so we use python to shift the time axis to 1850.
+
+## Conversion
+* Sea Surface Temperatures
+    * extract `TEMP`
+    * select the uppermost level
+    * rename `TEMP` to `SST_cpl`
+    * regrid to 1° x 1°
+    * interpolate to continents
+* Sea Ice
+    * extract `aice`
+    * convert from percent to fraction
+    * rename `aice` to `ice_cov`
+    * regrid to 1° x 1°
+    * interpolate to continents
+* Concatenate all files
+* Merge SST and Sea Ice file
+
