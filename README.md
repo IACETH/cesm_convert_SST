@@ -32,6 +32,26 @@ For `first` and `last` I recommend to use all years in the B simulation, even if
 
 Run `.\create_SST_forcing.sh` and wait...
 
+## Further Hints
+
+Tell CESM to use your input file (must be an F-type simulation):
+
+```bash
+# year when your simulation starts (and not the start of your SST dataset!)
+start_year=1950
+# year when your simulation starts (and not the start of your SST dataset!)
+end_year=1950
+# name of the B simulation
+CONTROL=B...
+
+# set the SST and ICE forcing file
+./xmlchange -file env_run.xml -id SSTICE_DATA_FILENAME -val /path/to/file/SST_ICE_${CONTROL}.nc
+
+./xmlchange -file env_run.xml -id SSTICE_YEAR_ALIGN -val ${start_year}
+./xmlchange -file env_run.xml -id SSTICE_YEAR_START -val ${start_year}
+./xmlchange -file env_run.xml -id SSTICE_YEAR_END -val ${end_year}
+```
+
 ## Helper Files
 
 ##### griddes_1x1.txt
