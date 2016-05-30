@@ -11,8 +11,8 @@ Convert SST and Sea Ice from POP output to DOCN input
 #### Linear Interpolation
 DOCN uses the monthly mean fields of SST and Sea Ice and linearly interpolates between them. The interpolation causes the monthly means to be unequal (i.e. the original monthly means and the interpolated monthly means). In the NCAR [description](http://www.cesm.ucar.edu/models/cesm1.2/cesm/doc/usersguide/x2306.html) they mention a way to avoid this, however, the necessary files are not available.
 
-#### Soil Ice
-The interpolation is not very good for soil ice that can become 0. The linearly interpolated and the original data may look very different. I do not think that there is a way around this.
+#### Sea Ice
+The interpolation is not very good for sea ice, which can become 0. The linearly interpolated and the original data may look very different (especially the onset and decay of the sea ice). I do not think that there is a way around this.
 
 #### Spatial Interpolation
 The output of POP is on a rotated grid which we here convert to a regular grid. After reading from the regular grid DOCN regrids this again to the rotated grid. This is of course not very clever, one should instead keep the original grid and tell POP to use this.
