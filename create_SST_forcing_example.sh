@@ -29,4 +29,4 @@ last=2099
 
 # source the create_SST_forcing.sh
 
-. ./create_SST_forcing.sh
+. ./generate_SST_forcing.sh
