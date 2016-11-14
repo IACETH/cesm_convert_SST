@@ -49,7 +49,6 @@ do
 
 		echo ${month}
 
-
 		# =====================================================================
 		# PREPARE OCEAN
 		# =====================================================================		
@@ -58,6 +57,12 @@ do
 		
 		ifile=${root_ocn}${file_ocn}
 		ofile=${dest}reggrid_${file_ocn}
+
+		# if file does not exist try to unzip ocean file
+		if [ ! -f ${ifile} ]; then
+			zcat $ifile > ${dest}${file_ocn}
+			ifile=${dest}${file_ocn}
+		fi
 		
 		if [ ! -f ${ofile} ]; then
 			cdo remap,griddes_1x1.txt,weight_ocn.nc `# regrid to 1x1 deg`\
@@ -67,6 +72,11 @@ do
 			    ${ifile} ${ofile}
 		fi
 
+		# remove unzipped ocean file
+		if [ -f ${dest}${file_ocn} ]; then
+			rm -f ${dest}${file_ocn}
+		fi
+		
 		ifile=${ofile}
 		ofile=${dest}gridfill_${file_ocn}
 
