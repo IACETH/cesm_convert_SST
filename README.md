@@ -23,7 +23,7 @@ When I compare the B and F simulation I get a temperature anomaly in Northern Hi
 
 ## Usage
 
-The main script is `create_SST_forcing.sh`. It executes the `CDO` commands and calls the `python` and `ncl` script. You need to change some parameters in `create_SST_forcing.sh` to run the file:
+The main script is `create_SST_forcing_example.sh`. You need to change the parameters in this file (and I recommend to rename it):
 
 * `casename`: name of the simulation
 * `root`: folder where the simulation is stored
@@ -33,7 +33,8 @@ The main script is `create_SST_forcing.sh`. It executes the `CDO` commands and c
 
 For `first` and `last` I recommend to use all years in the B simulation, even if you don't want to simulate all years in the `F` simulation.
 
-Run `.\create_SST_forcing.sh` and wait...
+Run `.\create_SST_forcing_example.sh` and wait...
+
 
 ## Further Hints
 
@@ -75,6 +76,10 @@ The conversion proceeds as follows:
 * Change time axis with `change_time.py`
 
 ## Helper Files
+
+The main script - `create_SST_forcing_example.sh` - calls
+`generate_SST_forcing.sh`, which in turn executes the `CDO` commands
+and calls the `python` and `ncl` script.
 
 ##### griddes_1x1.txt
 CDO grid description of the usual 1° x 1° ocean input file at `cesm/inputdata/atm/cam/sst`
