@@ -42,12 +42,13 @@ fi
 for year in $(seq $first $last)
 do
 
-	echo ${year}
 	for month in {1..12}
 	do
 		monthi=`printf "%02d" $month`
 
-		echo ${month}
+		echo =======
+		echo ${monthi}.${year}
+		echo =======
 
 		# =====================================================================
 		# PREPARE OCEAN
@@ -58,13 +59,16 @@ do
 		ifile=${root_ocn}${file_ocn}
 		ofile=${dest}reggrid_${file_ocn}
 
-		# if file does not exist try to unzip ocean file
-		if [ ! -f ${ifile} ]; then
-			zcat $ifile > ${dest}${file_ocn}
-			ifile=${dest}${file_ocn}
-		fi
 		
 		if [ ! -f ${ofile} ]; then
+
+			# if file does not exist try to unzip ocean file
+			if [ ! -f ${ifile} ]; then
+				echo unzipping ocean file
+				zcat $ifile > ${dest}${file_ocn}
+				ifile=${dest}${file_ocn}
+			fi
+
 			cdo remap,griddes_1x1.txt,weight_ocn.nc `# regrid to 1x1 deg`\
 				-chname,TEMP,SST_cpl `# rename`\
 			    -sellevel,500 `# sel topmost level`\
@@ -134,7 +138,7 @@ monthi=??
 # =====================================================================
 # Concatenate OCEAN
 # =====================================================================
-
+rm ${dest}SST_cpl.nc
 file_ocn=${file_root_ocn}${year}-${monthi}.nc
 ifiles=${dest}gridfill_${file_ocn}
 cdo cat ${ifiles} ${dest}SST_cpl.nc
@@ -142,7 +146,7 @@ cdo cat ${ifiles} ${dest}SST_cpl.nc
 # =====================================================================
 # Concatenate Sea Ice
 # =====================================================================
-
+rm ${dest}ice_cov.nc
 file_ice=${file_root_ice}${year}-${monthi}.nc
 ifiles=${dest}gridfill_${file_ice}
 cdo cat ${ifiles} ${dest}ice_cov.nc
@@ -150,8 +154,8 @@ cdo cat ${ifiles} ${dest}ice_cov.nc
 # =====================================================================
 # Merge Ocean and Sea Ice
 # =====================================================================
+rm ${dest}SST_ICE_${casename}.nc
 cdo merge ${dest}SST_cpl.nc ${dest}ice_cov.nc ${dest}SST_ICE_${casename}.nc
-
 
 # =====================================================================
 # Change Time
