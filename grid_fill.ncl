@@ -29,7 +29,14 @@ opt   = 0
 ; load in data
 in = addfiles(ifile, "r")
 var = in[:]->$varname$
-time_bnds = in[:]->time_bnds
+
+if (isfilevar(in[:], "time_bnds")) then
+    time_bnds = in[:]->time_bnds
+    has_time_bnds = True
+else
+    has_time_bnds = False
+end if 
+
 ; need to get rid of the z dimension
 ; this is not elegant
 if (dimsizes(dimsizes(var)) .eq. 4) then
@@ -45,7 +52,11 @@ poisson_grid_fill(var, gtype, guess, nscan, eps, relc, opt)
 fout = addfile(ofile,"c")
 
 fout->$varname$=var
-fout->time_bnds=time_bnds
+
+if (has_time_bnds) then
+    fout->time_bnds=time_bnds
+end if
+
 end
 
 
